@@ -124,7 +124,17 @@ addressInput.addEventListener("input", (event) => {
 checkoutBtn.addEventListener("click", () => {
     const isOpen = checkoutOpen();
     if (!isOpen) {
-        alert("O BurguerShop está fechado no momento");
+        Toastify({
+            text: "OOps, o BurguerShop está fechado!",
+            duration: 3000,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "#ef4444",
+            },
+        }).showToast();
         return;
     }
     if (cart.length === 0) {
@@ -153,7 +163,7 @@ checkoutBtn.addEventListener("click", () => {
 function checkoutOpen() {
     const data = new Date();
     const hora = data.getHours();
-    return hora >= 8 && hora < 20; //true, o Burguershop está aberto
+    return hora >= 10 && hora < 20; //true, o Burguershop está aberto
 }
 
 const spanItem = document.getElementById("date-span");
