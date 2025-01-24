@@ -138,7 +138,17 @@ checkoutBtn.addEventListener("click", () => {
         return;
     }
     if (cart.length === 0) {
-        alert("O carrinho está vazio");
+        Toastify({
+            text: "OOps, O carrinho esta Vázio!",
+            duration: 3000,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "#ef4444",
+            },
+        }).showToast();
         return;
     }
     if (addressInput.value.trim() === "") {
