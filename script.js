@@ -78,10 +78,9 @@ function updateCartModal(){
     total += item.price *item.quantity;
     cartItensContainer.appendChild(cartItemElement);
     });
-    cartTotal.textContent = total.toLocaleString("pt-BR", {
-        style: "currency",
-        currency:"BRL"
-    });
+    cartTotal.textContent = `${total.toLocaleString("pt-MZ")}.00Mzn`;
+
+    
 
     cartCounter.innerHTML = cart.length;
 }
@@ -107,6 +106,71 @@ function removeItemCart(name) {
         updateCartModal();
     }
 }
+
+addressInput.addEventListener("input", (event) => {
+    let inputValue = event.target.value;
+    
+    if (inputValue.trim() !== "") {
+        addressWarn.classList.add("hidden");
+        addressInput.classList.remove("border-red-500");
+    } else {
+        addressWarn.classList.remove("hidden");
+    }
+
+    
+});
+
+//função para finalizar o pedido
+checkoutBtn.addEventListener("click", () => {
+    const isOpen = checkoutOpen();
+    if (!isOpen) {
+        alert("O BurguerShop está fechado no momento");
+        return;
+    }
+    if (cart.length === 0) {
+        alert("O carrinho está vazio");
+        return;
+    }
+    if (addressInput.value.trim() === "") {
+        addressWarn.classList.remove("hidden");
+        addressInput.classList.add("border-red-500");
+        
+    }
+    //Enviar pedido para a API do Whatsapp
+    const cartItems = cart.map((item) => {
+        return `${item.name} - Quantidade: ${item.quantity}x - Preço: ${item.price.toFixed(2)} MZN |`;
+    }).join("\n");
+
+    const message = encodeURIComponent(cartItems);
+    const phone = "+258833354327";
+
+    window.open(`https://wa.me/${phone}?text=${message}%0AEndereço:%20${addressInput.value}`, "_blank");
+    cart.length = 0;
+    updateCartModal();
+});
+
+// função para verificar se o estabelecimento está aberto
+function checkoutOpen() {
+    const data = new Date();
+    const hora = data.getHours();
+    return hora >= 8 && hora < 20; //true, o Burguershop está aberto
+}
+
+const spanItem = document.getElementById("date-span");
+const isOpen = checkoutOpen();
+
+if (isOpen) {
+    spanItem.classList.remove("bg-red-500");
+    spanItem.classList.add("bg-green-600");
+} else {
+    spanItem.classList.remove("bg-green-600");
+    spanItem.classList.add("bg-red-500");
+}
+
+
+
+
+
 
 
 
