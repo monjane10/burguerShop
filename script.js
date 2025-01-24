@@ -68,15 +68,45 @@ function updateCartModal(){
             <div>
                 <p class="font-medium">${item.name}</p>
                 <p><span class="font-medium">Qtd:</span>${item.quantity}</p>
-                <p class="font-medium mt-2">${(item.price * item.quantity).toFixed(2)}Mzn</p>
+                <p class="font-medium mt-2">${(item.price).toFixed(2)}Mzn</p>
             </div>
             <div>
-                <button>Remover</button>
+                <button class="remove-cart-btn" data-name="${item.name}">Remover</button>
             </div>
         </div>
     `;
-    
+    total += item.price *item.quantity;
     cartItensContainer.appendChild(cartItemElement);
     });
+    cartTotal.textContent = total.toLocaleString("pt-BR", {
+        style: "currency",
+        currency:"BRL"
+    });
+
+    cartCounter.innerHTML = cart.length;
 }
+
+//função para remover  item do carrinho
+cartItensContainer.addEventListener("click", (event) => {
+    if (event.target.classList.contains("remove-cart-btn")) {
+        const itemName = event.target.getAttribute("data-name");
+        removeItemCart(itemName);
+    } 
+});
+
+function removeItemCart(name) {
+    const index = cart.findIndex((item) => item.name === name);
+    if (index !== -1) {
+        const item = cart[index];
+        if(item.quantity > 1) {
+            item.quantity -= 1;
+            updateCartModal();
+            return;
+        }
+        cart.splice(index, 1);
+        updateCartModal();
+    }
+}
+
+
 
